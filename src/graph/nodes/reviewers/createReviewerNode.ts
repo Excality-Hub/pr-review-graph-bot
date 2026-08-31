@@ -31,6 +31,6 @@ export function createReviewerNode(
       { role: "user", content: state.diff },
     ])) as { findings: Finding[] };
 
-    return { [stateKey]: result.findings } as Partial<GraphStateType>;
+    return { [stateKey]: result.findings ?? [] } as Partial<GraphStateType>;
   };
 }

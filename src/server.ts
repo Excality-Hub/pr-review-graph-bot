@@ -18,6 +18,7 @@ export function createApp(
   const app = express();
   app.use(
     express.json({
+      limit: "5mb",
       verify: (req, _res, buf) => {
         (req as RequestWithRawBody).rawBody = buf;
       },
@@ -28,7 +29,7 @@ export function createApp(
     const rawBody = req.rawBody ?? Buffer.from("");
     const signature = req.header("x-hub-signature-256");
 
-    if (!verifySignature(rawBody.toString("utf8"), signature, webhookSecret)) {
+    if (!verifySignature(rawBody, signature, webhookSecret)) {
       res.status(401).send("invalid signature");
       return;
     }

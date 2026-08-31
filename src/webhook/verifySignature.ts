@@ -1,7 +1,7 @@
 import crypto from "node:crypto";
 
 export function verifySignature(
-  payload: string,
+  payload: string | Buffer,
   signatureHeader: string | undefined,
   secret: string,
 ): boolean {

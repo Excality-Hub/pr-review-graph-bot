@@ -1,3 +1,4 @@
+import "dotenv/config";
 import { loadConfig } from "./config.js";
 import { createOctokit } from "./github.js";
 import { createChatModel } from "./llm.js";

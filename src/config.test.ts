@@ -45,4 +45,10 @@ describe("loadConfig", () => {
     const config = loadConfig({ ...baseEnv, PORT: "8080" });
     expect(config.port).toBe(8080);
   });
+
+  it("throws when PORT is not a valid positive integer", () => {
+    expect(() => loadConfig({ ...baseEnv, PORT: "abc" })).toThrow(
+      'PORT must be a positive integer, got "abc"',
+    );
+  });
 });
