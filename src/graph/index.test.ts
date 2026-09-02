@@ -18,7 +18,12 @@ describe("runReview", () => {
     const withStructuredOutput = vi.fn().mockReturnValue({ invoke });
     const model = { withStructuredOutput } as unknown as BaseChatModel;
 
-    await runReview(octokit, model, { owner: "acme", repo: "widgets", prNumber: 42 });
+    const template = "{{correctness}}\n\n{{security}}\n\n{{style}}";
+    await runReview(octokit, model, template, {
+      owner: "acme",
+      repo: "widgets",
+      prNumber: 42,
+    });
 
     expect(get).toHaveBeenCalledTimes(1);
     expect(withStructuredOutput).toHaveBeenCalledTimes(3);

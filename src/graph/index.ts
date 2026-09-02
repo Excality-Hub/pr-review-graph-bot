@@ -9,10 +9,10 @@ import {
   SECURITY_PROMPT,
   STYLE_PROMPT,
 } from "./nodes/reviewers/prompts.js";
-import { mergeFindings } from "./nodes/mergeFindings.js";
+import { createMergeFindingsNode } from "./nodes/mergeFindings.js";
 import { createPostCommentNode } from "./nodes/postComment.js";
 
-export function buildGraph(octokit: Octokit, model: BaseChatModel) {
+export function buildGraph(octokit: Octokit, model: BaseChatModel, commentTemplate: string) {
   return new StateGraph(GraphState)
     .addNode("fetch_diff", createFetchDiffNode(octokit))
     .addNode(
@@ -24,7 +24,7 @@ export function buildGraph(octokit: Octokit, model: BaseChatModel) {
       createReviewerNode(model, SECURITY_PROMPT, "securityFindings"),
     )
     .addNode("review_style", createReviewerNode(model, STYLE_PROMPT, "styleFindings"))
-    .addNode("merge_findings", mergeFindings)
+    .addNode("merge_findings", createMergeFindingsNode(commentTemplate))
     .addNode("post_comment", createPostCommentNode(octokit))
     .addEdge(START, "fetch_diff")
     .addEdge("fetch_diff", "review_correctness")
@@ -41,8 +41,9 @@ export function buildGraph(octokit: Octokit, model: BaseChatModel) {
 export async function runReview(
   octokit: Octokit,
   model: BaseChatModel,
+  commentTemplate: string,
   params: { owner: string; repo: string; prNumber: number },
 ): Promise<void> {
-  const graph = buildGraph(octokit, model);
+  const graph = buildGraph(octokit, model, commentTemplate);
   await graph.invoke(params);
 }

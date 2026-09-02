@@ -27,13 +27,14 @@ function pullRequestPayload(action: string) {
 describe("webhook server", () => {
   const octokit = {} as Octokit;
   const model = {} as BaseChatModel;
+  const commentTemplate = "{{correctness}}\n\n{{security}}\n\n{{style}}";
 
   beforeEach(() => {
     mockRunReview.mockClear();
   });
 
   it("returns 401 and does not run a review when the signature is invalid", async () => {
-    const app = createApp(octokit, model, SECRET);
+    const app = createApp(octokit, model, SECRET, commentTemplate);
     const body = JSON.stringify(pullRequestPayload("opened"));
 
     const response = await request(app)
@@ -48,7 +49,7 @@ describe("webhook server", () => {
   });
 
   it("returns 202 and runs a review for an 'opened' pull_request event", async () => {
-    const app = createApp(octokit, model, SECRET);
+    const app = createApp(octokit, model, SECRET, commentTemplate);
     const body = JSON.stringify(pullRequestPayload("opened"));
 
     const response = await request(app)
@@ -60,7 +61,7 @@ describe("webhook server", () => {
 
     expect(response.status).toBe(202);
     await vi.waitFor(() => expect(mockRunReview).toHaveBeenCalledTimes(1));
-    expect(mockRunReview).toHaveBeenCalledWith(octokit, model, {
+    expect(mockRunReview).toHaveBeenCalledWith(octokit, model, commentTemplate, {
       owner: "acme",
       repo: "widgets",
       prNumber: 42,
@@ -68,7 +69,7 @@ describe("webhook server", () => {
   });
 
   it("returns 200 and does not run a review for a 'closed' pull_request event", async () => {
-    const app = createApp(octokit, model, SECRET);
+    const app = createApp(octokit, model, SECRET, commentTemplate);
     const body = JSON.stringify(pullRequestPayload("closed"));
 
     const response = await request(app)
@@ -83,7 +84,7 @@ describe("webhook server", () => {
   });
 
   it("returns 200 and does not run a review for a non-pull_request event", async () => {
-    const app = createApp(octokit, model, SECRET);
+    const app = createApp(octokit, model, SECRET, commentTemplate);
     const body = JSON.stringify({ action: "opened" });
 
     const response = await request(app)

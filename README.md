@@ -26,6 +26,17 @@ fetch_diff -> review_correctness -+
 | `GITHUB_WEBHOOK_SECRET` | yes | Shared secret configured on the GitHub webhook, used to verify signatures |
 | `OPENAI_API_KEY` | yes | OpenAI API key |
 | `PORT` | no (default 3000) | HTTP port for the Express server |
+| `COMMENT_TEMPLATE_PATH` | no (default `templates/comment.md`) | Path to the Markdown template used to render the PR comment |
+
+## Customizing the PR comment
+
+The comment body is rendered from the Markdown file at
+`COMMENT_TEMPLATE_PATH` (default: [`templates/comment.md`](templates/comment.md)).
+The template supports three placeholders, each replaced with the
+rendered findings for that category: `{{correctness}}`, `{{security}}`,
+`{{style}}`. Anything else in the file — headers, footers, section
+order — is passed through as-is, so you can point `COMMENT_TEMPLATE_PATH`
+at your own file to customize the comment's look without touching code.
 
 ## Manual demo
 
