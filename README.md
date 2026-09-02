@@ -24,9 +24,7 @@ fetch_diff -> review_correctness -+
 |---|---|---|
 | `GITHUB_TOKEN` | yes | PAT with repo scope, used for reading diffs and posting comments |
 | `GITHUB_WEBHOOK_SECRET` | yes | Shared secret configured on the GitHub webhook, used to verify signatures |
-| `LLM_PROVIDER` | yes | `anthropic` or `openai` |
-| `ANTHROPIC_API_KEY` | if provider=anthropic | Anthropic API key |
-| `OPENAI_API_KEY` | if provider=openai | OpenAI API key |
+| `OPENAI_API_KEY` | yes | OpenAI API key |
 | `PORT` | no (default 3000) | HTTP port for the Express server |
 
 ## Manual demo
