@@ -3,6 +3,7 @@ export interface Config {
   githubWebhookSecret: string;
   openaiApiKey: string;
   port: number;
+  commentTemplatePath: string;
 }
 
 export function loadConfig(env: NodeJS.ProcessEnv = process.env): Config {
@@ -16,11 +17,14 @@ export function loadConfig(env: NodeJS.ProcessEnv = process.env): Config {
     throw new Error(`PORT must be a positive integer, got "${env.PORT}"`);
   }
 
+  const commentTemplatePath = env.COMMENT_TEMPLATE_PATH || "templates/comment.md";
+
   return {
     githubToken,
     githubWebhookSecret,
     openaiApiKey,
     port,
+    commentTemplatePath,
   };
 }
 
