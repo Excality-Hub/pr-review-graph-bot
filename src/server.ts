@@ -4,7 +4,7 @@ import type { BaseChatModel } from "@langchain/core/language_models/chat_models"
 import { verifySignature } from "./webhook/verifySignature.js";
 import { runReview } from "./graph/index.js";
 
-const RELEVANT_ACTIONS = new Set(["opened", "synchronize"]);
+const RELEVANT_ACTIONS = new Set(["opened"]);
 
 interface RequestWithRawBody extends express.Request {
   rawBody?: Buffer;
