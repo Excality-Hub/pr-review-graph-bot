@@ -14,6 +14,7 @@ export function createApp(
   octokit: Octokit,
   model: BaseChatModel,
   webhookSecret: string,
+  commentTemplate: string,
 ): express.Express {
   const app = express();
   app.use(
@@ -48,7 +49,7 @@ export function createApp(
 
     res.status(202).send("accepted");
 
-    runReview(octokit, model, { owner, repo, prNumber }).catch((error: unknown) => {
+    runReview(octokit, model, commentTemplate, { owner, repo, prNumber }).catch((error: unknown) => {
       console.error(`Review failed for ${owner}/${repo}#${prNumber}:`, error);
     });
   });

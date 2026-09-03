@@ -29,14 +29,20 @@ describe("loadConfig", () => {
     );
   });
 
-  it("returns a config with default port 3000", () => {
+  it("returns a config with default port 3000 and default comment template path", () => {
     const config = loadConfig(baseEnv);
     expect(config).toEqual({
       githubToken: "gh-token",
       githubWebhookSecret: "whsec",
       openaiApiKey: "oa-key",
       port: 3000,
+      commentTemplatePath: "templates/comment.md",
     });
+  });
+
+  it("uses a custom COMMENT_TEMPLATE_PATH when set", () => {
+    const config = loadConfig({ ...baseEnv, COMMENT_TEMPLATE_PATH: "custom/comment.md" });
+    expect(config.commentTemplatePath).toBe("custom/comment.md");
   });
 
   it("parses a custom PORT", () => {

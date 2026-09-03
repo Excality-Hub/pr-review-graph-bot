@@ -14,6 +14,7 @@ function config(overrides: Partial<Config> = {}): Config {
     githubWebhookSecret: "whsec",
     openaiApiKey: "oa-key",
     port: 3000,
+    commentTemplatePath: "templates/comment.md",
     ...overrides,
   };
 }
